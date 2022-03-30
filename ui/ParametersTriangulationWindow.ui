@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>parameters_triangulation_mainwindow</class>
+ <widget class="QMainWindow" name="parameters_triangulation_mainwindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>550</width>
+    <height>645</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Окно параметров триангуляции</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>triangle.png</normaloff>triangle.png</iconset>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="parameters_triangulation_centralwidget">
+   <widget class="QPushButton" name="choose_file_button">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>10</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Выбрать или заменить карту высот</string>
+    </property>
+    <property name="text">
+     <string>Выбрать карту высот</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="height_groupbox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>400</y>
+      <width>331</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Высота</string>
+    </property>
+    <widget class="QSpinBox" name="min_height_spinbox">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>30</y>
+       <width>111</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="specialValueText">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>-1000000</number>
+     </property>
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="min_height_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>От</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="max_height_label">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>30</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>До</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="max_height_spinbox">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>30</y>
+       <width>111</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="specialValueText">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>-1000000</number>
+     </property>
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QPushButton" name="start_triangulation_button">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>540</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Запустить процесс триангуляции</string>
+    </property>
+    <property name="text">
+     <string>Запустить</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="max_discrepancy_label">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>490</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Максимальная невязка</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="max_discrepancy_spinbox">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>490</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="specialValueText">
+     <string/>
+    </property>
+    <property name="minimum">
+     <number>5</number>
+    </property>
+    <property name="maximum">
+     <number>1000000</number>
+    </property>
+    <property name="value">
+     <number>5</number>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="step_groupbox">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>400</y>
+      <width>161</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Шаг</string>
+    </property>
+    <widget class="QLabel" name="step_y_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>51</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>по OY</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="step_y_spinbox">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>80</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="specialValueText">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>5</number>
+     </property>
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="step_x_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>51</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>по OX</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="step_x_spinbox">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>30</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="specialValueText">
+      <string/>
+     </property>
+     <property name="minimum">
+      <number>5</number>
+     </property>
+     <property name="maximum">
+      <number>1000000</number>
+     </property>
+     <property name="value">
+      <number>5</number>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="chosen_map_image">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>521</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Карта высот не выбрана</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Карта высот не выбрана</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <zorder>height_groupbox</zorder>
+   <zorder>start_triangulation_button</zorder>
+   <zorder>max_discrepancy_label</zorder>
+   <zorder>max_discrepancy_spinbox</zorder>
+   <zorder>step_groupbox</zorder>
+   <zorder>chosen_map_image</zorder>
+   <zorder>choose_file_button</zorder>
+  </widget>
+  <widget class="QMenuBar" name="parameters_triangulation_menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>550</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="triangulation_menu">
+    <property name="title">
+     <string>Триангуляция</string>
+    </property>
+    <addaction name="load_triangulation_action"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="triangulation_menu"/>
+  </widget>
+  <widget class="QStatusBar" name="parameters_triangulation_statusbar"/>
+  <action name="load_triangulation_action">
+   <property name="text">
+    <string>Загрузить из файла</string>
+   </property>
+   <property name="statusTip">
+    <string>Загрузить триангуляцию из файла</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

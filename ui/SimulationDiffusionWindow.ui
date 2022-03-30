@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>simulation_diffusion_mainwindow</class>
+ <widget class="QMainWindow" name="simulation_diffusion_mainwindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>752</width>
+    <height>824</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Моделирование диффузии</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>triangle.png</normaloff>triangle.png</iconset>
+  </property>
+  <widget class="QWidget" name="simulation_diffusion_centralwidget">
+   <widget class="QGroupBox" name="simulation_diffusion_groupbox">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>610</y>
+      <width>431</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Управление диффузией</string>
+    </property>
+    <widget class="QPushButton" name="next_step_button">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>30</y>
+       <width>141</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="statusTip">
+      <string>Перейти на следующий шаг</string>
+     </property>
+     <property name="text">
+      <string>Следующий шаг</string>
+     </property>
+     <property name="shortcut">
+      <string>Right</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="start_pause_button">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="statusTip">
+      <string>Запустить моделирование диффузии</string>
+     </property>
+     <property name="text">
+      <string>Старт</string>
+     </property>
+     <property name="shortcut">
+      <string>Ctrl+P</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="stop_button">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>30</y>
+       <width>121</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Стоп</string>
+     </property>
+     <property name="shortcut">
+      <string>Esc</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="go_to_step_label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>81</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Перейти на</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="go_to_step_spinbox">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>80</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>999999999</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="go_to_step_label_2">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>80</y>
+       <width>31</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>шаг</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="go_to_step_button">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>80</y>
+       <width>141</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="statusTip">
+      <string>Перейти на указанный шаг</string>
+     </property>
+     <property name="text">
+      <string>Перейти</string>
+     </property>
+     <property name="shortcut">
+      <string>Right</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="simulation_diffusion_menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>752</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="diffusion_menu">
+    <property name="title">
+     <string>Диффузия</string>
+    </property>
+    <addaction name="change_contamination_triangles_action"/>
+    <addaction name="change_pure_triangles_action"/>
+    <addaction name="change_edges_color_action"/>
+    <addaction name="separator"/>
+    <addaction name="show_parameters_diffusion_action"/>
+   </widget>
+   <addaction name="diffusion_menu"/>
+  </widget>
+  <widget class="QStatusBar" name="simulation_diffusion_statusbar"/>
+  <action name="show_parameters_diffusion_action">
+   <property name="text">
+    <string>Параметры диффузии</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать параметры диффузии</string>
+   </property>
+  </action>
+  <action name="change_edges_color_action">
+   <property name="text">
+    <string>Изменить цвет ребер</string>
+   </property>
+  </action>
+  <action name="change_pure_triangles_action">
+   <property name="text">
+    <string>Изменить цвет чистых треугольников</string>
+   </property>
+  </action>
+  <action name="change_contamination_triangles_action">
+   <property name="text">
+    <string>Изменить цвет загрязненных треугольников</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

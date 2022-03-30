@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>parameters_diffusion_mainwindow</class>
+ <widget class="QMainWindow" name="parameters_diffusion_mainwindow">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>472</width>
+    <height>392</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Параметры моделирования диффузии</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>triangle.png</normaloff>triangle.png</iconset>
+  </property>
+  <widget class="QWidget" name="parameters_diffusion_centralwidget">
+   <widget class="QPushButton" name="start_simulation_diffusion_button">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>290</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>Запустить процесс моделирования диффузии</string>
+    </property>
+    <property name="text">
+     <string>Запустить</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="calculating_float_values_checkbox">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>130</y>
+      <width>261</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Переходить в вещественные значения</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="analyzing_radius_calculating_float_values_spinbox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>220</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>999999</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="analyzing_radius_calculating_float_values_label">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>170</y>
+      <width>261</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Анализируемый радиус
+(для перехода в вещественные значения)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="method_selecting_adjacent_triangle_groupbox">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>20</y>
+      <width>211</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Метод выбора соседа</string>
+    </property>
+    <widget class="QRadioButton" name="equally_probable_choise_adjacent_triangle_radiobutton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>121</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Равновероятно</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="choise_adjacent_triangle_smallest_side_radiobutton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>181</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>По наименьшей стороне</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QSpinBox" name="initial_radius_of_contamination_spinbox">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>60</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>999999</number>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="initial_radius_of_contamination_label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Начальный радиус загрязнения</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="parameters_diffusion_menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>472</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="triangulation_menu">
+    <property name="title">
+     <string>Триангуляция</string>
+    </property>
+    <widget class="QMenu" name="show_3d_triangulation_menu">
+     <property name="statusTip">
+      <string>Показать триангуляцию в пространстве</string>
+     </property>
+     <property name="title">
+      <string>Показать триангуляцию в пространстве</string>
+     </property>
+     <addaction name="show_only_triangles_action"/>
+     <addaction name="show_only_edges_action"/>
+     <addaction name="show_triangles_and_edges_action"/>
+    </widget>
+    <addaction name="save_triangulation_action"/>
+    <addaction name="show_parameters_triangulation_action"/>
+    <addaction name="separator"/>
+    <addaction name="change_color_points_action"/>
+    <addaction name="change_color_edges_action"/>
+    <addaction name="change_color_triangles_action"/>
+    <addaction name="separator"/>
+    <addaction name="show_extract_points_action"/>
+    <addaction name="show_2d_triangulation_action"/>
+    <addaction name="show_3d_triangulation_menu"/>
+    <addaction name="separator"/>
+    <addaction name="show_map_action"/>
+   </widget>
+   <addaction name="triangulation_menu"/>
+  </widget>
+  <widget class="QStatusBar" name="parameters_diffusion_statusbar"/>
+  <action name="show_map_action">
+   <property name="text">
+    <string>Показать карту высот</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать карту высот</string>
+   </property>
+  </action>
+  <action name="save_triangulation_action">
+   <property name="text">
+    <string>Сохранить</string>
+   </property>
+   <property name="statusTip">
+    <string>Сохранить триангуляцию в файле *.json</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="show_extract_points_action">
+   <property name="text">
+    <string>Показать извлеченные точки</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать извлеченные точки</string>
+   </property>
+  </action>
+  <action name="show_2d_triangulation_action">
+   <property name="text">
+    <string>Показать триангуляцию на плоскости</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать триангуляцию на плоскости</string>
+   </property>
+  </action>
+  <action name="show_only_triangles_action">
+   <property name="text">
+    <string>Только треугольники</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать только треугольники 3D триангуляции</string>
+   </property>
+  </action>
+  <action name="show_only_edges_action">
+   <property name="text">
+    <string>Только ребра</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать только ребра 3D триангуляции</string>
+   </property>
+  </action>
+  <action name="show_triangles_and_edges_action">
+   <property name="text">
+    <string>Ребра и треугольники</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать треугольники и ребра 3D триангуляции</string>
+   </property>
+  </action>
+  <action name="show_parameters_triangulation_action">
+   <property name="text">
+    <string>Параметры триангуляции</string>
+   </property>
+   <property name="statusTip">
+    <string>Показать параметры триангуляции</string>
+   </property>
+  </action>
+  <action name="change_color_points_action">
+   <property name="text">
+    <string>Изменить цвет точек</string>
+   </property>
+  </action>
+  <action name="change_color_triangles_action">
+   <property name="text">
+    <string>Изменить цвет треугольников</string>
+   </property>
+  </action>
+  <action name="change_color_edges_action">
+   <property name="text">
+    <string>Изменить цвет ребер</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
