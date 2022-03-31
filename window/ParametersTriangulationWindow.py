@@ -1,12 +1,10 @@
-# TODO(To optimize and clean code)
 import os.path
-import cv2
-import sqlite3
-import numpy as np
-from datetime import datetime
 
+import cv2
+import numpy as np
 from PyQt5 import QtGui, uic
 from PyQt5.QtWidgets import QMessageBox, QFileDialog, QMainWindow, QAction, QActionGroup
+from History import History
 
 
 def create_question(title, question, text_btn1, text_btn2):
@@ -27,7 +25,7 @@ def create_question(title, question, text_btn1, text_btn2):
 
 
 class ParametersTriangulationWindow(QMainWindow):
-    conn = sqlite3.connect("history.db")
+    history = History(path_to_db_file="history.db")
     map_filename = ""
     map_height_image = None
 
@@ -38,66 +36,28 @@ class ParametersTriangulationWindow(QMainWindow):
         self.choose_file_button.clicked.connect(self.choose_map_file)
         self.start_triangulation_button.clicked.connect(lambda: self.start_triangulation(func_start_triangulation))
         self.load_triangulation_action.triggered.connect(func_load_triangulation)
-        self.db_load()
+        self.load_history()
 
-    def db_load(self):
-        cursor = self.conn.cursor()
-        cursor.execute("""CREATE TABLE IF NOT EXISTS file_info
-                            (id INTEGER PRIMARY KEY,
-                            path TEXT,
-                            date_of_use TEXT)""")
-        cursor.execute("""CREATE TABLE IF NOT EXISTS triangle_parameters
-                            (file_id INTEGER NOT NULL REFERENCES file_info(id), 
-                            min_height INTEGER, max_height INTEGER,
-                            step_x INTEGER, step_y INTEGER,
-                            max_discrepancy INTEGER)""")
-        self.conn.commit()
-        cursor.execute("SELECT * FROM file_info ORDER BY id DESC")
-        file_info_all = cursor.fetchall()
-        self.action_group = QActionGroup(self)
+    def load_history(self):
+        file_info_all = self.history.load()
+        action_group = QActionGroup(self)
         if len(file_info_all) > 0:
             for file_info in file_info_all:
                 action = QAction(f"{6 - file_info[0]}. {os.path.basename(file_info[1])}", self)
                 action.setStatusTip(f"{file_info[1]} ({file_info[2]})")
-                self.action_group.addAction(action)
+                action_group.addAction(action)
                 self.triangulation_menu.addAction(action)
-            self.action_group.triggered.connect(self.load_parameters)
-
-    def update_history(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT COUNT(id) FROM file_info")
-        row_count = cursor.fetchone()[0]
-        cursor.execute(f"""INSERT INTO file_info VALUES (?,?,?);""",
-                       (row_count + 1,
-                        self.map_filename,
-                        datetime.today().strftime('%d.%m.%Y %H:%M')))
-        cursor.execute(f"""INSERT INTO triangle_parameters VALUES (?,?,?,?,?,?);""",
-                       (row_count + 1,
-                        self.min_height_spinbox.value(),
-                        self.max_height_spinbox.value(),
-                        self.step_x_spinbox.value(),
-                        self.step_y_spinbox.value(),
-                        self.max_discrepancy_spinbox.value()))
-        self.conn.commit()
-        if row_count == 5:
-            cursor.execute(f"""DELETE FROM triangle_parameters WHERE file_id = ?""", (1,))
-            cursor.execute(f"""DELETE FROM file_info WHERE id = ?""", (1,))
-            cursor.execute(f"""UPDATE triangle_parameters SET file_id = file_id-1""")
-            cursor.execute(f"""UPDATE file_info SET id = id-1""")
-            self.conn.commit()
+            action_group.triggered.connect(self.load_parameters)
 
     def load_parameters(self, action):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM file_info WHERE id=?", (int(action.text()[0]),))
-        info = cursor.fetchone()
+        info = self.history.select_row_file_info(id_row=int(action.text()[0]))
         load_parameters_question, button_yes, _ = create_question(
             title="Подтверждение",
             question=f"Вы желаете загрузить триангуляцию от {info[2]}\nдля файла {info[1]}?",
             text_btn1="Да",
             text_btn2="Нет")
         if load_parameters_question.clickedButton() == button_yes:
-            cursor.execute("SELECT * FROM triangle_parameters WHERE file_id=?", (info[0],))
-            parameters = cursor.fetchone()
+            parameters = self.history.select_row_triangle_parameters(id_row=info[0])
             self.min_height_spinbox.setValue(parameters[1])
             self.max_height_spinbox.setValue(parameters[2])
             self.step_x_spinbox.setValue(parameters[3])
@@ -148,5 +108,8 @@ class ParametersTriangulationWindow(QMainWindow):
         elif self.min_height_spinbox.value() >= self.max_height_spinbox.value():
             QMessageBox.critical(self, "Ошибка", "Минимальная высота должна быть больше меньше максимальной высоты")
         else:
-            self.update_history()
+            self.history.update(map_filename=self.map_filename,
+                                min_height=self.min_height_spinbox.value(), max_height=self.max_height_spinbox.value(),
+                                step_x=self.step_x_spinbox.value(), step_y=self.step_y_spinbox.value(),
+                                max_discrepancy=self.max_discrepancy_spinbox.value())
             func_start_triangulation(func_update_statusbar=self.update_statusbar)

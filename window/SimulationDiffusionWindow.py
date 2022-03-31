@@ -1,4 +1,3 @@
-# TODO(To optimize and clean code)
 import matplotlib.colors
 import numpy as np
 from PyQt5 import uic
@@ -160,41 +159,47 @@ class SimulationDiffusionWindow(QMainWindow):
 
         # region Init Graphic Diffusion
         self.start_characteristics = np.array(
-            [(triangle.contamination_level, triangle.coefficient_diffusion) for triangle in self.triangulation.triangles])
+            [(triangle.contamination_level, triangle.coefficient_diffusion)
+             for triangle in self.triangulation.triangles])
         self.current_face_colors_discrete_values = np.array([
             self.face_color_contamination_triangle.name()
             if triangle.contamination_level > 0 else self.face_color_pure_triangle.name()
             for triangle in self.triangulation.triangles
         ])
-        # self.current_face_colors_discrete_values = self.start_face_colors_discrete_values
 
         if self.parameters_diffusion.calculating_float_values_checkbox.isChecked():
-            self.current_face_colors_float_values = np.array([
-                matplotlib.colors.to_hex([self.face_color_contamination_triangle.red() / 255,
-                                          self.face_color_contamination_triangle.green() / 255,
-                                          self.face_color_contamination_triangle.blue() / 255,
-                                          triangle.coefficient_diffusion], True)
-                for triangle in self.triangulation.triangles
-            ])
-            # self.current_face_colors_float_values = self.start_face_colors_float_values
+            face_color_contamination_triangle_rgba = np.array(self.face_color_contamination_triangle.getRgb()) / 255
+            self.current_face_colors_float_values = np.array([matplotlib.colors.to_hex(
+                c=[face_color_contamination_triangle_rgba[0],
+                   face_color_contamination_triangle_rgba[1],
+                   face_color_contamination_triangle_rgba[2],
+                   triangle.coefficient_diffusion],
+                keep_alpha=True) for triangle in self.triangulation.triangles])
 
         triangles = []
-        points_x, points_y, points_z = [], [], []
+        max_points_x, max_points_y, min_points_z, max_points_z = None, None, None, None
         for triangle in self.triangulation.triangles:
-            points_x += [triangle.nodes[0].x, triangle.nodes[1].x, triangle.nodes[2].x]
-            points_y += [triangle.nodes[0].y, triangle.nodes[1].y, triangle.nodes[2].y]
-            points_z += [triangle.nodes[0].z, triangle.nodes[1].z, triangle.nodes[2].z]
-            triangles.append(
-                ((triangle.nodes[0].x, triangle.nodes[0].y, triangle.nodes[0].z),
-                 (triangle.nodes[1].x, triangle.nodes[1].y, triangle.nodes[1].z),
-                 (triangle.nodes[2].x, triangle.nodes[2].y, triangle.nodes[2].z))
-            )
+            max_points_x = np.max([triangle.nodes[0].x, triangle.nodes[1].x, triangle.nodes[2].x]
+                                  if max_points_x is None else
+                                  [triangle.nodes[0].x, triangle.nodes[1].x, triangle.nodes[2].x, max_points_x])
+            max_points_y = np.max([triangle.nodes[0].y, triangle.nodes[1].y, triangle.nodes[2].y]
+                                  if max_points_y is None else
+                                  [triangle.nodes[0].y, triangle.nodes[1].y, triangle.nodes[2].y, max_points_y])
+            max_points_z = np.max([triangle.nodes[0].z, triangle.nodes[1].z, triangle.nodes[2].z]
+                                  if max_points_z is None else
+                                  [triangle.nodes[0].z, triangle.nodes[1].z, triangle.nodes[2].z, max_points_z])
+            min_points_z = np.min([triangle.nodes[0].z, triangle.nodes[1].z, triangle.nodes[2].z]
+                                  if min_points_z is None else
+                                  [triangle.nodes[0].z, triangle.nodes[1].z, triangle.nodes[2].z, min_points_z])
+            triangles.append(((triangle.nodes[0].x, triangle.nodes[0].y, triangle.nodes[0].z),
+                              (triangle.nodes[1].x, triangle.nodes[1].y, triangle.nodes[1].z),
+                              (triangle.nodes[2].x, triangle.nodes[2].y, triangle.nodes[2].z)))
         self.plot_canvas = PlotCanvas(
             triangles=triangles,
             edge_colors=self.edges_color.name(),
             start_face_colors_discrete_values=self.current_face_colors_discrete_values,
             start_face_colors_float_values=self.current_face_colors_float_values,
-            lims=[[0, max(points_x)], [0, max(points_y)], [min(points_z), max(points_z) * 2]],
+            lims=[[0, max_points_x], [0, max_points_y], [min_points_z, max_points_z * 2]],
             parent=self)
         self.plot_canvas.move(10, 30)
         # endregion
@@ -252,22 +257,29 @@ class SimulationDiffusionWindow(QMainWindow):
             for triangle in self.triangulation.triangles
         ])
 
+    def update_canvas(self, update_values=True):
+        self.update_face_colors_discrete_values()
+        if update_values:
+            self.func_update_discrete_values()
+        if self.current_face_colors_float_values is not None:
+            if update_values:
+                self.func_update_float_values()
+            self.update_face_colors_float_values()
+        self.plot_canvas.update_canvas(new_face_colors_discrete_values=self.current_face_colors_discrete_values,
+                                       new_face_colors_float_values=self.current_face_colors_float_values)
+        self.go_to_step_spinbox.setMinimum(self.triangulation.step)
+        self.go_to_step_spinbox.setValue(self.triangulation.step)
+        self.plot_canvas.axes_discrete_values.set_title(f'Моделирование диффузии\nШаг {self.triangulation.step}')
+        if self.current_face_colors_float_values is not None:
+            self.plot_canvas.axes_float_values.set_title(
+                f'Моделирование диффузии (в вещественных числах)\nШаг {self.triangulation.step}')
+
     def animation_func(self, i):
         if i == 0:
             self.animation.pause()
         else:
             self.triangulation.step += 1
-            self.go_to_step_spinbox.setMinimum(self.triangulation.step)
-            self.func_update_discrete_values()
-            self.update_face_colors_discrete_values()
-            self.plot_canvas.axes_discrete_values.set_title(f'Моделирование диффузии\nШаг {self.triangulation.step}')
-            if self.current_face_colors_float_values is not None:
-                self.func_update_float_values()
-                self.update_face_colors_float_values()
-                self.plot_canvas.axes_float_values.set_title(
-                    f'Моделирование диффузии (в вещественных числах)\nШаг {self.triangulation.step}')
-            self.plot_canvas.update_canvas(new_face_colors_discrete_values=self.current_face_colors_discrete_values,
-                                           new_face_colors_float_values=self.current_face_colors_float_values)
+            self.update_canvas()
         return self.plot_canvas.poly_3d_collection_discrete_values,
 
     def start_pause_button_clicked(self):
@@ -294,36 +306,14 @@ class SimulationDiffusionWindow(QMainWindow):
         self.next_step_button.setStatusTip("Перейти на следующий шаг")
         self.animation.pause()
         self.triangulation.step = 0
-        self.go_to_step_spinbox.setMinimum(self.triangulation.step)
-        self.go_to_step_spinbox.setValue(self.triangulation.step)
-        self.plot_canvas.axes_discrete_values.set_title(f'Моделирование диффузии\nШаг {self.triangulation.step}')
         for i in range(len(self.triangulation.triangles)):
             self.triangulation.triangles[i].contamination_level = self.start_characteristics[i][0]
             self.triangulation.triangles[i].coefficient_diffusion = self.start_characteristics[i][1]
-        self.update_face_colors_discrete_values()
-        if self.current_face_colors_float_values is not None:
-            self.plot_canvas.axes_float_values.set_title(
-                f'Моделирование диффузии (в вещественных числах)\nШаг {self.triangulation.step}')
-            self.update_face_colors_float_values()
-        self.plot_canvas.update_canvas(
-            new_face_colors_discrete_values=self.current_face_colors_discrete_values,
-            new_face_colors_float_values=self.current_face_colors_float_values
-        )
+        self.update_canvas(update_values=False)
 
     def next_step_button_clicked(self):
-        self.func_update_discrete_values()
-        self.update_face_colors_discrete_values()
-        if self.current_face_colors_float_values is not None:
-            self.func_update_float_values()
-            self.update_face_colors_float_values()
-        self.plot_canvas.update_canvas(new_face_colors_discrete_values=self.current_face_colors_discrete_values,
-                                       new_face_colors_float_values=self.current_face_colors_float_values)
         self.triangulation.step += 1
-        self.go_to_step_spinbox.setMinimum(self.triangulation.step)
-        self.plot_canvas.axes_discrete_values.set_title(f'Моделирование диффузии\nШаг {self.triangulation.step}')
-        if self.current_face_colors_float_values is not None:
-            self.plot_canvas.axes_float_values.set_title(
-                f'Моделирование диффузии (в вещественных числах)\nШаг {self.triangulation.step}')
+        self.update_canvas()
         self.stop_button.setEnabled(True)
         self.stop_button.setStatusTip("Сбросить дифузию к начальному состоянию")
 
@@ -335,17 +325,8 @@ class SimulationDiffusionWindow(QMainWindow):
             if self.current_face_colors_float_values is not None:
                 self.func_update_float_values()
         self.update_statusbar(text=f"Отображение {new_step} шага")
-        self.update_face_colors_discrete_values()
-        if self.current_face_colors_float_values is not None:
-            self.update_face_colors_float_values()
-        self.plot_canvas.update_canvas(new_face_colors_discrete_values=self.current_face_colors_discrete_values,
-                                       new_face_colors_float_values=self.current_face_colors_float_values)
         self.triangulation.step = new_step
-        self.go_to_step_spinbox.setMinimum(self.triangulation.step)
-        self.plot_canvas.axes_discrete_values.set_title(f'Моделирование диффузии\nШаг {self.triangulation.step}')
-        if self.current_face_colors_float_values is not None:
-            self.plot_canvas.axes_float_values.set_title(
-                f'Моделирование диффузии (в вещественных числах)\nШаг {self.triangulation.step}')
+        self.update_canvas(update_values=False)
 
     def update_statusbar(self, text):
         self.simulation_diffusion_statusbar.showMessage(text)

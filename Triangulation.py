@@ -2,7 +2,6 @@
 import json
 
 import cv2
-import matplotlib.colors
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMessageBox, QFileDialog, QWidget
 from matplotlib import pyplot as plt
@@ -204,15 +203,14 @@ class Triangulation:
                 mode,
                 color_triangles,
                 color_edges):
-        color_triangles = np.array(matplotlib.colors.to_rgb(color_triangles), dtype=int) * 255
         color_all_triangles = np.empty(np.array(self.triangles).shape, dtype='U50')
         for i in range(len(self.triangles)):
             averageZ = 150 * max(abs(self.triangles[i].nodes[0].z), abs(self.triangles[i].nodes[1].z),
                                  abs(self.triangles[i].nodes[2].z)) / (self.max_height - self.min_height)
             color_all_triangles[i] = '#%02x%02x%02x' % (
-                min(int(averageZ), color_triangles[0]),
-                min(int(averageZ), color_triangles[1]),
-                min(int(averageZ), color_triangles[2]))
+                min(int(averageZ * 1.5), color_triangles.red()),
+                min(int(averageZ * 1.5), color_triangles.green()),
+                min(int(averageZ * 1.5), color_triangles.blue()))
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         plt.get_current_fig_manager().window.setWindowIcon(QIcon("ui/triangle.png"))
