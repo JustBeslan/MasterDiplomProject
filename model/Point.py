@@ -14,8 +14,7 @@ class Point:
     @staticmethod
     def get_object_from_str(point_str):
         point = list(map(int, point_str.split(' ')))
-        if len(point) != 3:
-            raise Exception
+        assert len(point) == 3
         return Point(x=point[0],
                      y=point[1],
                      z=point[2])

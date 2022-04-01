@@ -1,4 +1,3 @@
-# TODO(To optimize and clean code)
 import json
 
 import cv2
@@ -19,6 +18,7 @@ class Triangulation:
     def __init__(self, **kwargs):
         if 'parameters_triangulation_window' in kwargs and \
                 isinstance(kwargs['parameters_triangulation_window'], ParametersTriangulationWindow):
+            # region Init parameters
             self.parameters_triangulation_window = kwargs['parameters_triangulation_window']
             self.map_filename = self.parameters_triangulation_window.map_filename
             self.map_height_image = self.parameters_triangulation_window.map_height_image
@@ -27,20 +27,20 @@ class Triangulation:
             self.step_x = self.parameters_triangulation_window.step_x_spinbox.value()
             self.step_y = self.parameters_triangulation_window.step_y_spinbox.value()
             self.max_discrepancy = self.parameters_triangulation_window.max_discrepancy_spinbox.value()
+            # endregion
         elif 'filename' in kwargs and \
                 isinstance(kwargs['filename'], str):
+            # region Read triangulation from file
             self.parameters_triangulation_window = QWidget()
             filename = kwargs['filename']
             with open(filename, "r") as reader:
                 data = list(json.load(reader).values())
                 try:
+                    # region Read parameters triangulation from file
                     parameters_triangulation_json = data[0]
-                    if len(parameters_triangulation_json) != 5:
-                        raise Exception
-                    if isinstance(parameters_triangulation_json["path to map of height"], str):
-                        self.map_filename = parameters_triangulation_json["path to map of height"]
-                    else:
-                        raise Exception
+                    assert len(parameters_triangulation_json) == 5
+                    assert isinstance(parameters_triangulation_json["path to map of height"], str)
+                    self.map_filename = parameters_triangulation_json["path to map of height"]
                     try:
                         self.map_height_image = cv2.imdecode(np.fromfile(self.map_filename, dtype=np.uint8),
                                                              cv2.IMREAD_UNCHANGED)
@@ -50,26 +50,18 @@ class Triangulation:
                                              code=cv2.COLOR_BGR2GRAY))
                     except FileNotFoundError:
                         self.map_height_image = None
-                    if isinstance(parameters_triangulation_json["range of height"], str):
-                        self.min_height, self.max_height = \
-                            list(
-                                map(int, parameters_triangulation_json["range of height"].split(' '))
-                            )
-                    else:
-                        raise Exception
-                    if isinstance(parameters_triangulation_json["step on the OX axis"], str):
-                        self.step_x = int(parameters_triangulation_json["step on the OX axis"])
-                    else:
-                        raise Exception
-                    if isinstance(parameters_triangulation_json["step on the OY axis"], str):
-                        self.step_y = int(parameters_triangulation_json["step on the OY axis"])
-                    else:
-                        raise Exception
-                    if isinstance(parameters_triangulation_json["maximum residual value"], str):
-                        self.max_discrepancy = int(parameters_triangulation_json["maximum residual value"])
-                    else:
-                        raise Exception
+                    assert isinstance(parameters_triangulation_json["range of height"], str)
+                    self.min_height, self.max_height = list(
+                        map(int, parameters_triangulation_json["range of height"].split(' ')))
+                    assert isinstance(parameters_triangulation_json["step on the OX axis"], str)
+                    self.step_x = int(parameters_triangulation_json["step on the OX axis"])
+                    assert isinstance(parameters_triangulation_json["step on the OY axis"], str)
+                    self.step_y = int(parameters_triangulation_json["step on the OY axis"])
+                    assert isinstance(parameters_triangulation_json["maximum residual value"], str)
+                    self.max_discrepancy = int(parameters_triangulation_json["maximum residual value"])
+                    # endregion
 
+                    # region Read triangles from file
                     for triangle in data[1:]:
                         try:
                             self.triangles = np.append(self.triangles, Triangle.get_object_from_str(triangle))
@@ -78,10 +70,12 @@ class Triangulation:
                                     self.points = np.append(self.points, node)
                         except:
                             raise Exception
+                    # endregion
                     QMessageBox.about(self.parameters_triangulation_window,
                                       "Сообщение", "Триангуляция успешно загружена")
                 except:
                     raise Exception
+            # endregion
 
     def is_immutable_triangle(self, index_triangle):
         if isinstance(index_triangle, float):

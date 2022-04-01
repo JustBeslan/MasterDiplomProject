@@ -17,17 +17,14 @@ class Triangle:
     @staticmethod
     def get_object_from_str(dictionary):
         nodes = np.array([Point.get_object_from_str(node_str) for node_str in dictionary["nodes"]])
-        if len(nodes) != 3:
-            raise Exception
+        assert len(nodes) == 3
         triangle = Triangle(nodes=nodes)
         indices_neighbours = \
             np.array(list(
                 map(float, dictionary["neighbours"].split(" "))
             ), dtype=int)
-        if len(indices_neighbours) <= 3:
-            triangle.indices_neighbours = indices_neighbours
-        else:
-            raise Exception
+        assert len(indices_neighbours) <= 3
+        triangle.indices_neighbours = indices_neighbours
         return triangle
 
     def find_common_points(self, triangle):

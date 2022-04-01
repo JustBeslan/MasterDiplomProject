@@ -84,7 +84,7 @@ class ParametersDiffusionWindow(QMainWindow):
             lambda: show_3d(mode="only edges")
         )
         self.show_triangles_and_edges_action.triggered.connect(
-            lambda: triangulation.show_3d(mode="triangles and edges")
+            lambda: show_3d(mode="triangles and edges")
         )
         # endregion
 
