@@ -41,3 +41,6 @@ class Triangle:
         area2 = get_triangle_area(self.nodes[0], point, self.nodes[2])
         area3 = get_triangle_area(self.nodes[1], point, self.nodes[2])
         return area == area1 + area2 + area3
+
+    def is_boundary(self):
+        return not self.indices_neighbours.shape[0] == 3

@@ -92,11 +92,15 @@ class SimulationDiffusion:
                 lambda index: not self.triangulation.is_immutable_triangle(index_triangle=index),
                 self.current_queue_triangles)):
             current_triangle = self.triangulation.triangles[index_triangle]
-            selected_neighbour_triangle = \
-                self.triangulation.triangles[self.get_index_neighbour(method=method,
-                                                                      triangle=current_triangle)]
-            current_triangle.contamination_level, selected_neighbour_triangle.contamination_level = \
-                selected_neighbour_triangle.contamination_level, current_triangle.contamination_level
+            index_selected_neighbour_triangle = self.get_index_neighbour(method=method,
+                                                                         triangle=current_triangle)
+            if index_selected_neighbour_triangle == -1:
+                if current_triangle.contamination_level == 1:
+                    current_triangle.contamination_level = 0
+            else:
+                selected_neighbour_triangle = self.triangulation.triangles[index_selected_neighbour_triangle]
+                current_triangle.contamination_level, selected_neighbour_triangle.contamination_level = \
+                    selected_neighbour_triangle.contamination_level, current_triangle.contamination_level
 
     def update_float_values(self):
         indices_triangles = set()
@@ -111,15 +115,17 @@ class SimulationDiffusion:
                 self.calculate_coefficient_diffusion(index_triangle=index_triangle)
 
     def get_index_neighbour(self, method, triangle):
+        random_value = np.random.randint(0, 100)
         if len(triangle.indices_neighbours) == 1:
-            return triangle.indices_neighbours[0]
+            return -1 if 0 <= random_value < 50 else triangle.indices_neighbours[0]
         else:
-            random_value = np.random.randint(0, 100)
             if method == "equally probable":
-                probable = 100 / triangle.indices_neighbours.shape[0]
+                ghostly_neighbor = triangle.is_boundary()
+                probable = 100 / (triangle.indices_neighbours.shape[0] + ghostly_neighbor)
                 for index, index_neighbour in enumerate(triangle.indices_neighbours):
                     if index * probable <= random_value < (index + 1) * probable:
                         return index_neighbour
+                return -1
             else:
                 distances = np.array([])
                 for index_neighbour in triangle.indices_neighbours:
@@ -129,7 +135,8 @@ class SimulationDiffusion:
                 index_max_value = int(np.argmax(distances))
                 index_min_value = int(np.argmin(distances))
                 if len(triangle.indices_neighbours) == 2:
-                    return triangle.indices_neighbours[index_max_value if 0 <= random_value < 30 else index_min_value]
+                    return -1 if 0 <= random_value < 20 else \
+                        triangle.indices_neighbours[index_max_value if 20 <= random_value < 40 else index_min_value]
                 else:
                     return triangle.indices_neighbours[
                         index_max_value if 0 <= random_value < 20 else
