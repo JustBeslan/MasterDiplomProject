@@ -1,3 +1,5 @@
+import numpy as np
+
 from window.ParametersDiffusionWindow import ParametersDiffusionWindow
 from window.SimulationDiffusionWindow import SimulationDiffusionWindow
 from window.ParametersTriangulationWindow import *
@@ -139,7 +141,12 @@ class SimulationDiffusion:
         self.current_queue_triangles = np.arange(len(self.triangulation.triangles))
         # region Init diffusion discrete values
         radius = self.parameters_diffusion_window.initial_radius_of_contamination_spinbox.value()
-        index_center_triangle = len(self.triangulation.triangles) // 2
+
+        center_point_image = np.array(np.array(self.parameters_triangulation_window.map_height_image).shape) // 2
+        index_center_triangle = list(
+            filter(lambda pair: pair[1].check_contain_point(center_point_image[1], center_point_image[0]),
+                   enumerate(self.triangulation.triangles)))[0][0]
+
         for index in self.get_indices_triangles_within_radius(index_triangle=index_center_triangle, radius=radius):
             if self.triangulation.triangles[index].contamination_level == 0:
                 self.triangulation.triangles[index].contamination_level = 1

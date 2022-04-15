@@ -29,3 +29,15 @@ class Triangle:
 
     def find_common_points(self, triangle):
         return list(filter(lambda point: point in triangle.nodes, self.nodes))
+
+    def check_contain_point(self, x, y, z=None):
+        def get_triangle_area(point1, point2, point3) -> float:
+            return abs((point1.x - point3.x) * (point2.y - point3.y) + (point2.x - point3.x) * (point3.y - point1.y))
+
+        area = get_triangle_area(self.nodes[0], self.nodes[1], self.nodes[2])
+
+        point = Point(x=x, y=y, z=z)
+        area1 = get_triangle_area(self.nodes[0], self.nodes[1], point)
+        area2 = get_triangle_area(self.nodes[0], point, self.nodes[2])
+        area3 = get_triangle_area(self.nodes[1], point, self.nodes[2])
+        return area == area1 + area2 + area3

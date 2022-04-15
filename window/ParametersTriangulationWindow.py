@@ -50,7 +50,7 @@ class ParametersTriangulationWindow(QMainWindow):
             action_group.triggered.connect(self.load_parameters)
 
     def load_parameters(self, action):
-        info = self.history.select_row_file_info(id_row=int(action.text()[0]))
+        info = self.history.select_row_file_info(id_row=6 - int(action.text()[0]))
         load_parameters_question, button_yes, _ = create_question(
             title="Подтверждение",
             question=f"Вы желаете загрузить триангуляцию от {info[2]}\nдля файла {info[1]}?",
@@ -90,7 +90,6 @@ class ParametersTriangulationWindow(QMainWindow):
             self.map_height_image = np.array(
                 cv2.cvtColor(src=self.map_height_image,
                              code=cv2.COLOR_BGR2GRAY))
-
         self.chosen_map_image.setPixmap(QtGui.QPixmap(self.map_filename))
         self.chosen_map_image.setToolTip(self.map_filename)
         self.chosen_map_image.setStatusTip(self.map_filename)
