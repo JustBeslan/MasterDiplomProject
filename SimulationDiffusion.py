@@ -149,7 +149,10 @@ class SimulationDiffusion:
         # region Init diffusion discrete values
         radius = self.parameters_diffusion_window.initial_radius_of_contamination_spinbox.value()
 
-        center_point_image = np.array(np.array(self.parameters_triangulation_window.map_height_image).shape) // 2
+
+        center_point_image = np.array(self.triangulation.map_height_image_shape) // 2
+        # center_point_image = np.array(np.array(self.parameters_triangulation_window.map_height_image).shape) // 2 if self.parameters_triangulation_window is not None
+
         index_center_triangle = list(
             filter(lambda pair: pair[1].check_contain_point(center_point_image[1], center_point_image[0]),
                    enumerate(self.triangulation.triangles)))[0][0]

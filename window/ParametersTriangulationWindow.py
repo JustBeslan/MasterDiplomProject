@@ -28,6 +28,7 @@ class ParametersTriangulationWindow(QMainWindow):
     history = History(path_to_db_file="history.db")
     map_filename = ""
     map_height_image = None
+    map_height_image_shape = None
 
     def __init__(self, func_load_triangulation, func_start_triangulation):
         super(ParametersTriangulationWindow, self).__init__()
@@ -90,6 +91,7 @@ class ParametersTriangulationWindow(QMainWindow):
             self.map_height_image = np.array(
                 cv2.cvtColor(src=self.map_height_image,
                              code=cv2.COLOR_BGR2GRAY))
+        self.map_height_image_shape = np.array(self.map_height_image).shape
         self.chosen_map_image.setPixmap(QtGui.QPixmap(self.map_filename))
         self.chosen_map_image.setToolTip(self.map_filename)
         self.chosen_map_image.setStatusTip(self.map_filename)

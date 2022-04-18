@@ -22,6 +22,7 @@ class Triangulation:
             self.parameters_triangulation_window = kwargs['parameters_triangulation_window']
             self.map_filename = self.parameters_triangulation_window.map_filename
             self.map_height_image = self.parameters_triangulation_window.map_height_image
+            self.map_height_image_shape = self.parameters_triangulation_window.map_height_image_shape
             self.min_height = self.parameters_triangulation_window.min_height_spinbox.value()
             self.max_height = self.parameters_triangulation_window.max_height_spinbox.value()
             self.step_x = self.parameters_triangulation_window.step_x_spinbox.value()
@@ -38,9 +39,13 @@ class Triangulation:
                 try:
                     # region Read parameters triangulation from file
                     parameters_triangulation_json = data[0]
-                    assert len(parameters_triangulation_json) == 5
-                    assert isinstance(parameters_triangulation_json["path to map of height"], str)
-                    self.map_filename = parameters_triangulation_json["path to map of height"]
+                    assert len(parameters_triangulation_json) == 6
+                    assert isinstance(parameters_triangulation_json["location of the height map"], str)
+                    self.map_filename = parameters_triangulation_json["location of the height map"]
+                    assert isinstance(parameters_triangulation_json["dimension of the height map"], str)
+                    self.map_height_image_shape = list(
+                        map(int, parameters_triangulation_json["dimension of the height map"].split(' ')))
+                    tuple(parameters_triangulation_json["dimension of the height map"].split(' '))
                     try:
                         self.map_height_image = cv2.imdecode(np.fromfile(self.map_filename, dtype=np.uint8),
                                                              cv2.IMREAD_UNCHANGED)
@@ -249,7 +254,9 @@ class Triangulation:
         # region Serialize triangulation
         serialize_triangulation = {
             "parameters": {
-                "path to map of height": self.parameters_triangulation_window.map_filename,
+                "location of the height map": self.parameters_triangulation_window.map_filename,
+                "dimension of the height map":
+                    "{0} {1}".format(*self.parameters_triangulation_window.map_height_image_shape),
                 "range of height": str(self.min_height) + " " + str(self.max_height),
                 "step on the OX axis": str(self.step_x),
                 "step on the OY axis": str(self.step_y),
