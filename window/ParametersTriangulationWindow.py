@@ -1,8 +1,9 @@
 import os.path
-
+from ui.ui_ParametersTriangulationWindow import Ui_parameters_triangulation_mainwindow
 import cv2
 import numpy as np
-from PyQt5 import QtGui, uic
+# from PyQt5 import uic
+from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMessageBox, QFileDialog, QMainWindow, QAction, QActionGroup
 from History import History
 
@@ -24,15 +25,16 @@ def create_question(title, question, text_btn1, text_btn2):
     return message_box, button_yes, button_no
 
 
-class ParametersTriangulationWindow(QMainWindow):
+class ParametersTriangulationWindow(QMainWindow, Ui_parameters_triangulation_mainwindow):
     history = History(path_to_db_file="history.db")
     map_filename = ""
     map_height_image = None
     map_height_image_shape = None
 
     def __init__(self, func_load_triangulation, func_start_triangulation):
-        super(ParametersTriangulationWindow, self).__init__()
-        uic.loadUi('ui/ParametersTriangulationWindow.ui', self)
+        # super(ParametersTriangulationWindow, self).__init__()
+        # uic.loadUi('ui/ParametersTriangulationWindow.ui', self)
+        super(ParametersTriangulationWindow, self).__init__(parameters_triangulation_mainwindow=self)
         self.setFixedSize(self.width(), self.height())
         self.choose_file_button.clicked.connect(self.choose_map_file)
         self.start_triangulation_button.clicked.connect(lambda: self.start_triangulation(func_start_triangulation))

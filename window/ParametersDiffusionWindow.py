@@ -1,4 +1,4 @@
-from PyQt5 import uic
+from ui.ui_ParametersDiffusionWindow import Ui_parameters_diffusion_mainwindow
 from PyQt5.QtGui import QPixmap, QColor, QIcon
 from PyQt5.QtWidgets import QMainWindow, QColorDialog, QMessageBox
 
@@ -20,13 +20,14 @@ def set_color_icon_action(action, color, changing):
     action.setIcon(QIcon(pixmap))
 
 
-class ParametersDiffusionWindow(QMainWindow):
+class ParametersDiffusionWindow(QMainWindow, Ui_parameters_diffusion_mainwindow):
 
     def __init__(self,
                  triangulation,
                  func_start_simulation_diffusion):
-        super(ParametersDiffusionWindow, self).__init__()
-        uic.loadUi('ui/ParametersDiffusionWindow.ui', self)
+        # super(ParametersDiffusionWindow, self).__init__()
+        # uic.loadUi('ui/ParametersDiffusionWindow.ui', self)
+        super(ParametersDiffusionWindow, self).__init__(parameters_diffusion_mainwindow=self)
         self.setFixedSize(self.width(), self.height())
 
         # region Init properties

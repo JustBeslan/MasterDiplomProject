@@ -1,6 +1,7 @@
 import matplotlib.colors
 import numpy as np
-from PyQt5 import uic
+from ui.ui_SimulationDiffusionWindow import Ui_simulation_diffusion_mainwindow
+# from PyQt5 import uic
 from PyQt5.QtGui import QColor, QPixmap, QIcon
 from PyQt5.QtWidgets import QMainWindow, QSizePolicy, QColorDialog
 from matplotlib import pyplot as plt, animation
@@ -104,7 +105,7 @@ class PlotCanvas(FigureCanvas):
         self.draw()
 
 
-class SimulationDiffusionWindow(QMainWindow):
+class SimulationDiffusionWindow(QMainWindow, Ui_simulation_diffusion_mainwindow):
     start_face_colors_discrete_values = None
     start_face_colors_float_values = None
     current_face_colors_discrete_values = None
@@ -118,8 +119,9 @@ class SimulationDiffusionWindow(QMainWindow):
                  func_update_discrete_values,
                  func_update_float_values,
                  triangulation):
-        super(SimulationDiffusionWindow, self).__init__()
-        uic.loadUi('ui/SimulationDiffusionWindow.ui', self)
+        # super(SimulationDiffusionWindow, self).__init__()
+        # uic.loadUi('ui/SimulationDiffusionWindow.ui', self)
+        super(SimulationDiffusionWindow, self).__init__(simulation_diffusion_mainwindow = self)
 
         # region Init properties
         self.triangulation = triangulation
