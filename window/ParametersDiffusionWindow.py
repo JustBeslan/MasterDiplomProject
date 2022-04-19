@@ -92,16 +92,15 @@ class ParametersDiffusionWindow(QMainWindow, Ui_parameters_diffusion_mainwindow)
         self.show_map_action.triggered.connect(triangulation.show_map_image_height)
         self.save_triangulation_action.triggered.connect(triangulation.save)
         self.start_simulation_diffusion_button.clicked.connect(func_start_simulation_diffusion)
-        self.calculating_float_values_checkbox.stateChanged.connect(
-            lambda: self.analyzing_radius_calculating_float_values_spinbox.setEnabled(
-                self.calculating_float_values_checkbox.isChecked())
+        self.calculate_averaged_values_checkbox.stateChanged.connect(
+            lambda: self.averaging_radius_spinbox.setEnabled(self.calculate_averaged_values_checkbox.isChecked())
         )
         # endregion
 
     def show_parameters_diffusion(self):
         text = f"Начальный радиус загрязнения : <i><b>{self.initial_radius_of_contamination_spinbox.value()}</b></i><br>\n" \
                f"Метод выбора соседнего треугольника: <i><b>{'По наименьшей стороне' if self.choise_adjacent_triangle_smallest_side_radiobutton.isChecked() else 'Равновероятно'}</b></i><br>\n" \
-               f"Переходить в вещественные значения: <i><b>{'Переходить' if self.calculating_float_values_checkbox.isChecked() else 'Не переходить'}</b></i><br>\n"
-        if self.calculating_float_values_checkbox.isChecked():
-            text += f"Анализируемый радиус для перехода в вещественные значения: <i><b>{self.analyzing_radius_calculating_float_values_spinbox.value()}</b></i><br>\n"
+               f"Вычислять осредненные значения: <i><b>{'Вычислять' if self.calculate_averaged_values_checkbox.isChecked() else 'Не вычислять'}</b></i><br>\n"
+        if self.calculate_averaged_values_checkbox.isChecked():
+            text += f"Радиус осреднения: <i><b>{self.averaging_radius_spinbox.value()}</b></i><br>\n"
         QMessageBox.about(self, "Параметры диффузии", text)

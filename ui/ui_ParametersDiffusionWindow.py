@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'ParametersDiffusionWindowLpzzlS.ui'
+## Form generated from reading UI file 'ParametersDiffusionWindowhjHrvz.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -49,19 +49,19 @@ class Ui_parameters_diffusion_mainwindow(object):
         self.start_simulation_diffusion_button = QPushButton(self.parameters_diffusion_centralwidget)
         self.start_simulation_diffusion_button.setObjectName(u"start_simulation_diffusion_button")
         self.start_simulation_diffusion_button.setGeometry(QRect(160, 260, 141, 41))
-        self.calculating_float_values_checkbox = QCheckBox(self.parameters_diffusion_centralwidget)
-        self.calculating_float_values_checkbox.setObjectName(u"calculating_float_values_checkbox")
-        self.calculating_float_values_checkbox.setGeometry(QRect(110, 130, 261, 31))
-        self.analyzing_radius_calculating_float_values_spinbox = QSpinBox(self.parameters_diffusion_centralwidget)
-        self.analyzing_radius_calculating_float_values_spinbox.setObjectName(u"analyzing_radius_calculating_float_values_spinbox")
-        self.analyzing_radius_calculating_float_values_spinbox.setEnabled(False)
-        self.analyzing_radius_calculating_float_values_spinbox.setGeometry(QRect(240, 190, 91, 31))
-        self.analyzing_radius_calculating_float_values_spinbox.setMinimum(0)
-        self.analyzing_radius_calculating_float_values_spinbox.setMaximum(999999)
-        self.analyzing_radius_calculating_float_values_label = QLabel(self.parameters_diffusion_centralwidget)
-        self.analyzing_radius_calculating_float_values_label.setObjectName(u"analyzing_radius_calculating_float_values_label")
-        self.analyzing_radius_calculating_float_values_label.setGeometry(QRect(110, 190, 131, 31))
-        self.analyzing_radius_calculating_float_values_label.setAlignment(Qt.AlignCenter)
+        self.calculate_averaged_values_checkbox = QCheckBox(self.parameters_diffusion_centralwidget)
+        self.calculate_averaged_values_checkbox.setObjectName(u"calculate_averaged_values_checkbox")
+        self.calculate_averaged_values_checkbox.setGeometry(QRect(120, 130, 231, 31))
+        self.averaging_radius_spinbox = QSpinBox(self.parameters_diffusion_centralwidget)
+        self.averaging_radius_spinbox.setObjectName(u"averaging_radius_spinbox")
+        self.averaging_radius_spinbox.setEnabled(False)
+        self.averaging_radius_spinbox.setGeometry(QRect(240, 190, 91, 31))
+        self.averaging_radius_spinbox.setMinimum(0)
+        self.averaging_radius_spinbox.setMaximum(999999)
+        self.averaging_radius_label = QLabel(self.parameters_diffusion_centralwidget)
+        self.averaging_radius_label.setObjectName(u"averaging_radius_label")
+        self.averaging_radius_label.setGeometry(QRect(110, 190, 131, 31))
+        self.averaging_radius_label.setAlignment(Qt.AlignCenter)
         self.method_selecting_adjacent_triangle_groupbox = QGroupBox(self.parameters_diffusion_centralwidget)
         self.method_selecting_adjacent_triangle_groupbox.setObjectName(u"method_selecting_adjacent_triangle_groupbox")
         self.method_selecting_adjacent_triangle_groupbox.setGeometry(QRect(240, 20, 211, 91))
@@ -160,8 +160,8 @@ class Ui_parameters_diffusion_mainwindow(object):
         self.start_simulation_diffusion_button.setStatusTip(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u0417\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c \u043f\u0440\u043e\u0446\u0435\u0441\u0441 \u043c\u043e\u0434\u0435\u043b\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u0434\u0438\u0444\u0444\u0443\u0437\u0438\u0438", None))
 #endif // QT_CONFIG(statustip)
         self.start_simulation_diffusion_button.setText(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u0417\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c", None))
-        self.calculating_float_values_checkbox.setText(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u041f\u0435\u0440\u0435\u0445\u043e\u0434\u0438\u0442\u044c \u0432 \u0432\u0435\u0449\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f", None))
-        self.analyzing_radius_calculating_float_values_label.setText(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u0420\u0430\u0434\u0438\u0443\u0441 \u043e\u0441\u0440\u0435\u0434\u043d\u0435\u043d\u0438\u044f", None))
+        self.calculate_averaged_values_checkbox.setText(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u0412\u044b\u0447\u0438\u0441\u043b\u044f\u0442\u044c \u043e\u0441\u0440\u0435\u0434\u043d\u0435\u043d\u043d\u044b\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f", None))
+        self.averaging_radius_label.setText(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u0420\u0430\u0434\u0438\u0443\u0441 \u043e\u0441\u0440\u0435\u0434\u043d\u0435\u043d\u0438\u044f", None))
         self.method_selecting_adjacent_triangle_groupbox.setTitle(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u041c\u0435\u0442\u043e\u0434 \u0432\u044b\u0431\u043e\u0440\u0430 \u0441\u043e\u0441\u0435\u0434\u0430", None))
         self.equally_probable_choise_adjacent_triangle_radiobutton.setText(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u0420\u0430\u0432\u043d\u043e\u0432\u0435\u0440\u043e\u044f\u0442\u043d\u043e", None))
         self.choise_adjacent_triangle_smallest_side_radiobutton.setText(QCoreApplication.translate("parameters_diffusion_mainwindow", u"\u041f\u043e \u043d\u0430\u0438\u043c\u0435\u043d\u044c\u0448\u0435\u0439 \u0441\u0442\u043e\u0440\u043e\u043d\u0435", None))

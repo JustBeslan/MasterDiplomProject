@@ -169,7 +169,7 @@ class SimulationDiffusionWindow(QMainWindow, Ui_simulation_diffusion_mainwindow)
             for triangle in self.triangulation.triangles
         ])
 
-        if self.parameters_diffusion.calculating_float_values_checkbox.isChecked():
+        if self.parameters_diffusion.calculate_averaged_values_checkbox.isChecked():
             face_color_contamination_triangle_rgba = np.array(self.face_color_contamination_triangle.getRgb()) / 255
             self.current_face_colors_float_values = np.array([matplotlib.colors.to_hex(
                 c=[face_color_contamination_triangle_rgba[0],

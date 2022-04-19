@@ -78,7 +78,7 @@ class SimulationDiffusion:
     def calculate_coefficient_diffusion(self, index_triangle):
         indices = self.get_indices_triangles_within_radius(
             index_triangle=index_triangle,
-            radius=self.parameters_diffusion_window.analyzing_radius_calculating_float_values_spinbox.value())
+            radius=self.parameters_diffusion_window.averaging_radius_spinbox.value())
         count_contamination_triangle_within_radius = \
             sum([self.triangulation.triangles[index].contamination_level for index in indices])
         return count_contamination_triangle_within_radius / len(indices)
@@ -104,12 +104,10 @@ class SimulationDiffusion:
 
     def update_float_values(self):
         indices_triangles = set()
-        for index_triangle in list(filter(
-                lambda index: self.triangulation.triangles[index].contamination_level > 0,
-                self.current_queue_triangles)):
+        for index_triangle in self.current_queue_triangles:
             indices_triangles |= self.get_indices_triangles_within_radius(
                 index_triangle=index_triangle,
-                radius=self.parameters_diffusion_window.analyzing_radius_calculating_float_values_spinbox.value())
+                radius=self.parameters_diffusion_window.averaging_radius_spinbox.value())
         for index_triangle in indices_triangles:
             self.triangulation.triangles[index_triangle].coefficient_diffusion = \
                 self.calculate_coefficient_diffusion(index_triangle=index_triangle)
@@ -163,7 +161,7 @@ class SimulationDiffusion:
         # endregion
 
         # region Init diffusion float values
-        if self.parameters_diffusion_window.calculating_float_values_checkbox.isChecked():
+        if self.parameters_diffusion_window.calculate_averaged_values_checkbox.isChecked():
             self.update_float_values()
         # endregion
         self.show_simulation_diffusion_window()
