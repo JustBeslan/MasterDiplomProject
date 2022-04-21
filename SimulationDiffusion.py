@@ -1,10 +1,9 @@
-import numpy as np
-
-from window.ParametersDiffusionWindow import ParametersDiffusionWindow
-from window.SimulationDiffusionWindow import SimulationDiffusionWindow
-from window.ParametersTriangulationWindow import *
 from random import shuffle
+
 from Triangulation import Triangulation
+from window.ParametersDiffusionWindow import ParametersDiffusionWindow
+from window.ParametersTriangulationWindow import *
+from window.SimulationDiffusionWindow import SimulationDiffusionWindow
 
 
 class SimulationDiffusion:
@@ -53,13 +52,16 @@ class SimulationDiffusion:
                                                caption="Выберите файл триангуляции",
                                                filter="JSON (*.json)")[0]
         if len(filename) > 0:
-            loadTriangulationQuestion, buttonYes, _ = create_question(title="Подтверждение",
+            loadTriangulationQuestion, buttonYes, _ = create_question(parent=self.parameters_triangulation_window,
+                                                                      title="Подтверждение",
                                                                       question=f'Загрузить триангуляцию\n"{filename}"?',
                                                                       text_btn1="Да",
                                                                       text_btn2="Нет")
             if loadTriangulationQuestion.clickedButton() == buttonYes:
                 try:
-                    self.triangulation = Triangulation(filename=filename)
+                    self.triangulation = Triangulation(
+                        filename=filename,
+                        parameters_triangulation_window=self.parameters_triangulation_window)
                     self.show_parameters_diffusion_window()
                 except Exception:
                     QMessageBox.critical(self.parameters_triangulation_window,
@@ -92,64 +94,42 @@ class SimulationDiffusion:
                 lambda index: not self.triangulation.is_immutable_triangle(index_triangle=index),
                 self.current_queue_triangles)):
             current_triangle = self.triangulation.triangles[index_triangle]
-            index_selected_neighbour_triangle = self.get_index_neighbour(method=method,
-                                                                         triangle=current_triangle)
-            if index_selected_neighbour_triangle == -1:
+            neighbours = [self.triangulation.triangles[index]
+                          for index in self.triangulation.triangles[index_triangle].indices_neighbours]
+
+            current_triangle.select_index_neighbour(method=method, neighbours=neighbours)
+            if current_triangle.index_selected_neighbor == -1:
                 if current_triangle.contamination_level == 1:
                     current_triangle.contamination_level = 0
             else:
-                selected_neighbour_triangle = self.triangulation.triangles[index_selected_neighbour_triangle]
+                selected_neighbour_triangle = self.triangulation.triangles[current_triangle.index_selected_neighbor]
                 current_triangle.contamination_level, selected_neighbour_triangle.contamination_level = \
                     selected_neighbour_triangle.contamination_level, current_triangle.contamination_level
 
     def update_float_values(self):
         indices_triangles = set()
-        for index_triangle in self.current_queue_triangles:
+        for index_triangle in list(filter(
+                lambda index: self.triangulation.triangles[index].contamination_level > 0 or
+                              self.triangulation.triangles[index].index_selected_neighbor is not None,
+                self.current_queue_triangles
+        )):
             indices_triangles |= self.get_indices_triangles_within_radius(
                 index_triangle=index_triangle,
                 radius=self.parameters_diffusion_window.averaging_radius_spinbox.value())
+            if self.triangulation.triangles[index_triangle].index_selected_neighbor is not None:
+                indices_triangles |= self.get_indices_triangles_within_radius(
+                    index_triangle=self.triangulation.triangles[index_triangle].index_selected_neighbor,
+                    radius=self.parameters_diffusion_window.averaging_radius_spinbox.value())
         for index_triangle in indices_triangles:
             self.triangulation.triangles[index_triangle].coefficient_diffusion = \
                 self.calculate_coefficient_diffusion(index_triangle=index_triangle)
-
-    def get_index_neighbour(self, method, triangle):
-        random_value = np.random.randint(0, 100)
-        if len(triangle.indices_neighbours) == 1:
-            return -1 if 0 <= random_value < 50 else triangle.indices_neighbours[0]
-        else:
-            if method == "equally probable":
-                ghostly_neighbor = triangle.is_boundary()
-                probable = 100 / (triangle.indices_neighbours.shape[0] + ghostly_neighbor)
-                for index, index_neighbour in enumerate(triangle.indices_neighbours):
-                    if index * probable <= random_value < (index + 1) * probable:
-                        return index_neighbour
-                return -1
-            else:
-                distances = np.array([])
-                for index_neighbour in triangle.indices_neighbours:
-                    common_point_1, common_point_2 = triangle.find_common_points(
-                        triangle=self.triangulation.triangles[index_neighbour])
-                    distances = np.append(distances, common_point_1.get_distance(point=common_point_2))
-                index_max_value = int(np.argmax(distances))
-                index_min_value = int(np.argmin(distances))
-                if len(triangle.indices_neighbours) == 2:
-                    return -1 if 0 <= random_value < 20 else \
-                        triangle.indices_neighbours[index_max_value if 20 <= random_value < 40 else index_min_value]
-                else:
-                    return triangle.indices_neighbours[
-                        index_max_value if 0 <= random_value < 20 else
-                        list({0, 1, 2} - {index_min_value, index_max_value})[0] if 20 <= random_value < 50 else
-                        index_min_value
-                    ]
 
     def start(self):
         self.current_queue_triangles = np.arange(len(self.triangulation.triangles))
         # region Init diffusion discrete values
         radius = self.parameters_diffusion_window.initial_radius_of_contamination_spinbox.value()
 
-
         center_point_image = np.array(self.triangulation.map_height_image_shape) // 2
-        # center_point_image = np.array(np.array(self.parameters_triangulation_window.map_height_image).shape) // 2 if self.parameters_triangulation_window is not None
 
         index_center_triangle = list(
             filter(lambda pair: pair[1].check_contain_point(center_point_image[1], center_point_image[0]),

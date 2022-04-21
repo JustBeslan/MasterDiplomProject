@@ -16,8 +16,7 @@ class Triangulation:
     triangles = np.array([])
 
     def __init__(self, **kwargs):
-        if 'parameters_triangulation_window' in kwargs and \
-                isinstance(kwargs['parameters_triangulation_window'], ParametersTriangulationWindow):
+        if len(kwargs) == 1:
             # region Init parameters
             self.parameters_triangulation_window = kwargs['parameters_triangulation_window']
             self.map_filename = self.parameters_triangulation_window.map_filename
@@ -29,10 +28,9 @@ class Triangulation:
             self.step_y = self.parameters_triangulation_window.step_y_spinbox.value()
             self.max_discrepancy = self.parameters_triangulation_window.max_discrepancy_spinbox.value()
             # endregion
-        elif 'filename' in kwargs and \
-                isinstance(kwargs['filename'], str):
+        elif len(kwargs) == 2:
             # region Read triangulation from file
-            self.parameters_triangulation_window = QWidget()
+            self.parameters_triangulation_window = kwargs['parameters_triangulation_window']
             filename = kwargs['filename']
             with open(filename, "r") as reader:
                 data = list(json.load(reader).values())

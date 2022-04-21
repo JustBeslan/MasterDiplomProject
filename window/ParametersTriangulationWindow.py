@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import QMessageBox, QFileDialog, QMainWindow, QAction, QAct
 from History import History
 
 
-def create_question(title, question, text_btn1, text_btn2):
-    message_box = QMessageBox()
+def create_question(parent, title, question, text_btn1, text_btn2):
+    message_box = QMessageBox(parent)
     message_box.setIcon(QMessageBox.Question)
     message_box.setWindowTitle(title)
     message_box.setText(question)
@@ -55,6 +55,7 @@ class ParametersTriangulationWindow(QMainWindow, Ui_parameters_triangulation_mai
     def load_parameters(self, action):
         info = self.history.select_row_file_info(id_row=6 - int(action.text()[0]))
         load_parameters_question, button_yes, _ = create_question(
+            parent=self,
             title="Подтверждение",
             question=f"Вы желаете загрузить триангуляцию от {info[2]}\nдля файла {info[1]}?",
             text_btn1="Да",
@@ -79,10 +80,13 @@ class ParametersTriangulationWindow(QMainWindow, Ui_parameters_triangulation_mai
         self.map_filename = QFileDialog.getOpenFileName(parent=self,
                                                         caption='Выберите карту высот',
                                                         filter="Image (*.png *.jpg *.jpeg)")[0]
-        if len(self.map_filename) > 0 and QMessageBox.question(self, "Подтверждение",
-                                                               f"Загрузить файл\n{self.map_filename}?",
-                                                               QMessageBox.Yes | QMessageBox.No,
-                                                               QMessageBox.Yes) == QMessageBox.Yes:
+
+        loadMapHeightQuestion, buttonYes, _ = create_question(parent=self,
+                                                              title="Подтверждение",
+                                                              question=f"Загрузить файл\n{self.map_filename}?",
+                                                              text_btn1="Да",
+                                                              text_btn2="Нет")
+        if len(self.map_filename) > 0 and loadMapHeightQuestion.clickedButton() == buttonYes:
             self.update_statusbar(text="Загрузка карты высот...")
             self.load_map_height()
             self.update_statusbar(text="Загрузка карты высот завершена")

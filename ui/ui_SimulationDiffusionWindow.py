@@ -19,7 +19,7 @@ class Ui_simulation_diffusion_mainwindow(object):
             simulation_diffusion_mainwindow.setObjectName(u"simulation_diffusion_mainwindow")
         simulation_diffusion_mainwindow.resize(752, 824)
         icon = QIcon()
-        icon.addFile(u"triangle.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"ui/triangle.png", QSize(), QIcon.Normal, QIcon.Off)
         simulation_diffusion_mainwindow.setWindowIcon(icon)
         self.show_parameters_diffusion_action = QAction(simulation_diffusion_mainwindow)
         self.show_parameters_diffusion_action.setObjectName(u"show_parameters_diffusion_action")

@@ -20,7 +20,7 @@ class Ui_parameters_diffusion_mainwindow(object):
         parameters_diffusion_mainwindow.setWindowModality(Qt.WindowModal)
         parameters_diffusion_mainwindow.resize(472, 365)
         icon = QIcon()
-        icon.addFile(u"triangle.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"ui/triangle.png", QSize(), QIcon.Normal, QIcon.Off)
         parameters_diffusion_mainwindow.setWindowIcon(icon)
         self.show_map_action = QAction(parameters_diffusion_mainwindow)
         self.show_map_action.setObjectName(u"show_map_action")

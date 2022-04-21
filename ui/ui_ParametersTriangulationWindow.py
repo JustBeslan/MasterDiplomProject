@@ -20,7 +20,7 @@ class Ui_parameters_triangulation_mainwindow(object):
         parameters_triangulation_mainwindow.setWindowModality(Qt.WindowModal)
         parameters_triangulation_mainwindow.resize(550, 645)
         icon = QIcon()
-        icon.addFile(u"triangle.png", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u"ui/triangle.png", QSize(), QIcon.Normal, QIcon.Off)
         parameters_triangulation_mainwindow.setWindowIcon(icon)
         parameters_triangulation_mainwindow.setAnimated(True)
         self.load_triangulation_action = QAction(parameters_triangulation_mainwindow)
