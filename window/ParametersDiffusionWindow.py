@@ -98,7 +98,7 @@ class ParametersDiffusionWindow(QMainWindow, Ui_parameters_diffusion_mainwindow)
         # endregion
 
     def show_parameters_diffusion(self):
-        text = f"Начальный радиус загрязнения : <i><b>{self.initial_radius_of_contamination_spinbox.value()}</b></i><br>\n" \
+        text = f"Начальный радиус поражения : <i><b>{self.initial_radius_of_contamination_spinbox.value()}</b></i><br>\n" \
                f"Метод выбора соседнего треугольника: <i><b>{'По наименьшей стороне' if self.choise_adjacent_triangle_smallest_side_radiobutton.isChecked() else 'Равновероятно'}</b></i><br>\n" \
                f"Вычислять осредненные значения: <i><b>{'Вычислять' if self.calculate_averaged_values_checkbox.isChecked() else 'Не вычислять'}</b></i><br>\n"
         if self.calculate_averaged_values_checkbox.isChecked():
